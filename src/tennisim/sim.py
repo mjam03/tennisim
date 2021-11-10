@@ -1,15 +1,30 @@
 import random
+from typing import Tuple, Union
 
 
-def sim_point(p_s):
-    # returns true if server wins point
+def sim_point(p_s: float) -> bool:
+    """Simulate point in tennis by drawing from uni dist
+
+    Args:
+        p_s (float): probability server wins point
+
+    Returns:
+        bool: True if server won, False if not
+    """
     return random.uniform(0, 1) <= p_s
 
 
-def sim_game(p_s):
-    # takes an input probability and simulates a game of tennis
-    # p_s is the probability of server winning a given point
-    # scores list keeps track of score tuples
+def sim_game(p_s: float) -> Tuple[bool, list]:
+    """Simulate game of tennis using just prob server wins point
+
+    Args:
+        p_s (float): probability server wins point
+
+    Returns:
+        Tuple[bool, list]: tuple of True if server won game and list
+        of tuples of points as the game progressed. E.g. if server won all
+        points would return (True, [(1,0),(2,0),(3,0),(4,0)])
+    """
     scores = []
     # s and r are points scored by server and returner
     s = 0
@@ -50,18 +65,27 @@ def sim_game(p_s):
 
     # if here then must have finished game pre-deuce
     # return True if server wins, false if returner
-    # also return the score progression in the game
     if s == 4:
         return (True, scores)
-    elif r == 4:
+    else:
         return (False, scores)
 
 
-def sim_tiebreak(a_s, b_s, a_first=True):
-    # a_s is probability of player a winning a point on their serve
-    # b_s is probability of player b winning a point on their serve
-    # a_first is bool to set who serves first in the tiebreak
+def sim_tiebreak(
+    a_s: float, b_s: float, a_first: bool = True
+) -> Tuple[bool, list]:
+    """Simulate tiebreak using probab of each player winning on serve
 
+    Args:
+        a_s (float): probability player a wins point on serve
+        b_s (float): probability player b wins point on serve
+        a_first (bool, optional): bool to mark who serves first.
+        Defaults to True for player a to serve first
+
+    Returns:
+        Tuple[bool, list]: returns tuple of result (True if a won, false if b)
+        and the progression of tiebreak points
+    """
     tb_scores = []
     a = 0
     b = 0
@@ -114,11 +138,22 @@ def sim_tiebreak(a_s, b_s, a_first=True):
             points_served = 0
 
 
-def sim_set(a_s: float, b_s: float, a_first: bool = True) -> tuple:
-    # a_s is probability of player a winning a point on their serve
-    # b_s is probability of player b winning a point on their serve
-    # a_first is bool to set who serves first in the set
+def sim_set(
+    a_s: float, b_s: float, a_first: bool = True
+) -> Union[Tuple, Tuple[bool, list, list]]:
+    """Simulate set using probab of each player winning on serve
 
+    Args:
+        a_s (float): probability player a wins point on serve
+        b_s (float): probability player b wins point on serve
+        a_first (bool, optional): bool to mark who serves first.
+        Defaults to True for player a to serve first
+
+    Returns:
+        Union[Tuple, Tuple[bool, list, list]]: returns tuple of
+        result (True if a won, false if b), list of progression of game scores
+        and list of progression of scores within games
+    """
     # checker to prevent infinite tiebreak
     if (a_s == 1) and (b_s == 1):
         print("Each player will win every service point")
@@ -191,7 +226,23 @@ def sim_set(a_s: float, b_s: float, a_first: bool = True) -> tuple:
                 return (False, games, game_scores)
 
 
-def sim_match(a_s, b_s, a_first=True, best_of=3):
+def sim_match(
+    a_s: float, b_s: float, a_first: bool = True, best_of: int = 3
+) -> Tuple[bool, list, list, list]:
+    """Simulate tennis match using probab of each player winning on serve
+
+    Args:
+        a_s (float): probability player a wins point on serve
+        b_s (float): probability player b wins point on serve
+        a_first (bool, optional): bool to mark who serves first.
+        Defaults to True for player a to serve first
+        best_of (int, optional): how many sets to play best of. Defaults to 3.
+
+    Returns:
+        Tuple[bool, list, list, list]: returns tuple of result (true if a won,
+        false if b won), progression of match scores, set scores and
+        game scores within those sets
+    """
 
     set_scores = []
     game_scores = []
