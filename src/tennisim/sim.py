@@ -114,10 +114,16 @@ def sim_tiebreak(a_s, b_s, a_first=True):
             points_served = 0
 
 
-def sim_set(a_s, b_s, a_first=True):
+def sim_set(a_s: float, b_s: float, a_first: bool = True) -> tuple:
     # a_s is probability of player a winning a point on their serve
     # b_s is probability of player b winning a point on their serve
     # a_first is bool to set who serves first in the set
+
+    # checker to prevent infinite tiebreak
+    if (a_s == 1) and (b_s == 1):
+        print("Each player will win every service point")
+        print("Will enter infinite tiebreak loop")
+        return ()
 
     # games is a storing variable for game scores
     game_scores = []
