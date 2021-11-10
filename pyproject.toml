@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "tennisim"
 version = "0.1.0"
-description = ""
+description = "Simple pure python functions for simulating tennis matches"
 authors = ["mjam03 <markjamison03@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/mjam03/tennisim"
+repository = "https://github.com/mjam03/tennisim"
 
 [tool.poetry.dependencies]
 python = ">=3.7.1,<3.11"
@@ -17,6 +21,7 @@ numpy = "^1.21.4"
 flake8 = "^4.0.1"
 mypy = "^0.910"
 black = "^21.10b0"
+seaborn = "^0.11.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
