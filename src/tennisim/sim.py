@@ -1,5 +1,8 @@
 import random
-from typing import Tuple, Union
+from typing import Any
+from typing import List
+from typing import Tuple
+from typing import Union
 
 
 def sim_point(p_s: float) -> bool:
@@ -14,7 +17,7 @@ def sim_point(p_s: float) -> bool:
     return random.uniform(0, 1) <= p_s
 
 
-def sim_game(p_s: float, ppg: int = 4) -> Tuple[bool, list]:
+def sim_game(p_s: float, ppg: int = 4) -> Tuple[bool, List[Any]]:
     """Simulate game of tennis using just prob server wins point
 
     Args:
@@ -74,7 +77,7 @@ def sim_game(p_s: float, ppg: int = 4) -> Tuple[bool, list]:
 
 def sim_tiebreak(
     a_s: float, b_s: float, a_first: bool = True
-) -> Tuple[bool, list]:
+) -> Tuple[bool, List[Any]]:
     """Simulate tiebreak using probab of each player winning on serve
 
     Args:
@@ -141,7 +144,7 @@ def sim_tiebreak(
 
 def sim_set(
     a_s: float, b_s: float, a_first: bool = True
-) -> Union[Tuple, Tuple[bool, list, list]]:
+) -> Union[Tuple, Tuple[bool, List[Any], List[Any]]]:
     """Simulate set using probab of each player winning on serve
 
     Args:
@@ -229,7 +232,7 @@ def sim_set(
 
 def sim_match(
     a_s: float, b_s: float, a_first: bool = True, best_of: int = 3
-) -> Tuple[bool, list, list, list]:
+) -> Tuple[bool, List[Any], List[Any], List[Any]]:
     """Simulate tennis match using probab of each player winning on serve
 
     Args:
