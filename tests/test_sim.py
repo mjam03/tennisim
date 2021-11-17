@@ -22,7 +22,7 @@ class TestSimGame:
 
     def test_game_zero(self) -> None:
         simed_games = [sim_game(0) for x in range(0, 1000)]
-        simed_games = [x[1] for x in simed_games if x[1][-1] == (0, 4)]
+        simed_games = [x for x in simed_games if x[1][-1] == (0, 4)]
         assert len(simed_games) == 1000
 
     def test_game_one(self) -> None:
