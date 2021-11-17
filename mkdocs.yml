@@ -1,0 +1,62 @@
+site_name: tennisim
+site_author: mjam03
+site_url: https://mjam03.github.io/tennisim
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+  palette:
+    primary: deep orange
+    accent: blue
+
+nav:
+  - tennisim: index.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          rendering:
+            show_root_heading: true
+
+      watch:
+        - src
+  - autolinks
+  - git-revision-date-localized:
+      type: timeago
+      fallback_to_build_date: true
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - abbr
+  - def_list
+  - admonition
+  - markdown_include.include:
+      base_path: docs
+  - meta
+  - toc:
+      permalink: true
+      baselevel: 2
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: "!!python/name:pymdownx.emoji.to_svg"
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+repo_name: mjam03/tennisim
+repo_url: https://github.com/mjam03/tennisim

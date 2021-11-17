@@ -1,0 +1,101 @@
+name: Release
+
+# runs on new successful push to master
+# success is controlled by the tests workflow
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  release:
+    name: Release
+    # just run on latest os with 3.9 python
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2.2.2
+        with:
+          python-version: "3.9"
+
+      # install CI build dependencies
+      - name: Upgrade pip
+        run: |
+          pip install --constraint=.github/workflows/constraints.txt pip
+          pip --version
+      - name: Install Poetry
+        run: |
+          pip install --constraint=.github/workflows/constraints.txt poetry
+          poetry --version
+      # check if there is a new commit
+      - name: Check if there is a parent commit
+        id: check-parent-commit
+        run: |
+          echo "::set-output name=sha::$(git rev-parse --verify --quiet HEAD^)"
+      # if there is then grab and update
+      - name: Detect and tag new version
+        id: check-version
+        if: steps.check-parent-commit.outputs.sha
+        uses: salsify/action-detect-and-tag-new-version@v2.0.1
+        with:
+          version-command: |
+            bash -o pipefail -c "poetry version | awk '{ print \$2 }'"
+      # use poetry to bump version
+      - name: Bump version for developmental release
+        if: "! steps.check-version.outputs.tag"
+        run: |
+          poetry version patch &&
+          version=$(poetry version | awk '{ print $2 }') &&
+          poetry version $version.dev.$(date +%s)
+      # build and publish package to PyPI and TesPyPI
+      # secrets stored in repo
+      - name: Build package
+        run: |
+          poetry build --ansi
+      - name: Publish package on PyPI
+        if: steps.check-version.outputs.tag
+        uses: pypa/gh-action-pypi-publish@v1.4.2
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
+
+      - name: Publish package on TestPyPI
+        if: "! steps.check-version.outputs.tag"
+        uses: pypa/gh-action-pypi-publish@v1.4.2
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+
+      # use git token to draft release
+      - name: Publish the release notes
+        uses: release-drafter/release-drafter@v5.15.0
+        with:
+          publish: ${{ steps.check-version.outputs.tag != '' }}
+          tag: ${{ steps.check-version.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # after 'release' job, draft documentation
+  deploy-docs:
+    # again just use latest os and python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      # grab poetry, use it to install dependencies and package
+      - run: pip install poetry
+      - run: poetry config virtualenvs.create false --local
+      - run: poetry install
+      # install libraries to make docs
+      - run: pip install -r docs/requirements.txt
+      # make them
+      - run: mkdocs gh-deploy --force
