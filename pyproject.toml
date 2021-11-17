@@ -22,6 +22,33 @@ flake8 = "^4.0.1"
 mypy = "^0.910"
 black = "^21.10b0"
 seaborn = "^0.11.2"
+jupyter-to-medium = "^0.2.4"
+nox = "^2021.10.1"
+nox-poetry = "^0.8.6"
+coverage = {extras = ["toml"], version = "^6.1.2"}
+pytest-cov = "^3.0.0"
+Pygments = "^2.9.0"
+types-toml = "^0.10.1"
+
+# let pytest coverage know where code is
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["tennisim"]
+
+# define acceptable coverage and show untested lines 
+[tool.coverage.report]
+show_missing = true
+fail_under = 95
+
+[tool.mypy]
+strict = true
+pretty = true
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

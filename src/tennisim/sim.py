@@ -14,11 +14,12 @@ def sim_point(p_s: float) -> bool:
     return random.uniform(0, 1) <= p_s
 
 
-def sim_game(p_s: float) -> Tuple[bool, list]:
+def sim_game(p_s: float, ppg: int = 4) -> Tuple[bool, list]:
     """Simulate game of tennis using just prob server wins point
 
     Args:
         p_s (float): probability server wins point
+        ppg (int): points per game in case want to play with longer game length
 
     Returns:
         Tuple[bool, list]: tuple of True if server won game and list
@@ -30,7 +31,7 @@ def sim_game(p_s: float) -> Tuple[bool, list]:
     s = 0
     r = 0
     # while game still going
-    while (s < 4) and (r < 4):
+    while (s < ppg) and (r < ppg):
         # simulate the point
         if sim_point(p_s):
             s += 1
@@ -42,9 +43,9 @@ def sim_game(p_s: float) -> Tuple[bool, list]:
 
         # we need a catcher here if we get to 3-3
         # so that we can handle deuce
-        if (s == 3) and (r == 3):
+        if (s == (ppg - 1)) and (r == (ppg - 1)):
             # give a bit more space
-            while (s < 5) and (r < 5):
+            while (s < (ppg + 1)) and (r < (ppg + 1)):
                 # simulate the point
                 if sim_point(p_s):
                     s += 1
@@ -54,18 +55,18 @@ def sim_game(p_s: float) -> Tuple[bool, list]:
                 scores.append((s, r))
 
                 # if we're at 4 all then bring us back to 3 all
-                if (r == 4) and (s == 4):
-                    s = 3
-                    r = 3
+                if (r == ppg) and (s == ppg):
+                    s = ppg - 1
+                    r = ppg - 1
             # if we've excited then must be game over after deuce
-            if s == 5:
+            if s == ppg + 1:
                 return (True, scores)
-            elif r == 5:
+            elif r == ppg + 1:
                 return (False, scores)
 
     # if here then must have finished game pre-deuce
     # return True if server wins, false if returner
-    if s == 4:
+    if s == ppg:
         return (True, scores)
     else:
         return (False, scores)

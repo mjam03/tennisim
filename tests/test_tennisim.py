@@ -4,6 +4,7 @@ from tennisim.sim import sim_match
 from tennisim.sim import sim_point
 from tennisim.sim import sim_set
 from tennisim.sim import sim_tiebreak
+from tennisim.theory import theory_game
 
 
 def test_version():
@@ -32,6 +33,17 @@ def test_game_one():
     assert len(simed_games) == 1000
 
 
+def test_game_50():
+    simed_games = [sim_game(0.5)[0] for x in range(0, 100000)]
+    mean_sim = sum(simed_games) / len(simed_games)
+    assert abs(mean_sim - 0.5) < 0.05
+
+
+def test_game_length():
+    simed_games = [len(sim_game(1, ppg=x)[1]) for x in range(4, 1000)]
+    assert simed_games == [x for x in range(4, 1000)]
+
+
 def test_set_zero():
     simed_sets = [sim_set(0, 1) for x in range(0, 1000)]
     simed_sets = [x for x in simed_sets if x[1][-1] == (0, 6)]
@@ -42,6 +54,12 @@ def test_set_one():
     simed_sets = [sim_set(1, 0) for x in range(0, 1000)]
     simed_sets = [x for x in simed_sets if x[1][-1] == (6, 0)]
     assert len(simed_sets) == 1000
+
+
+def test_set_50():
+    simed_sets = [sim_set(0.5, 0.5)[0] for x in range(0, 10000)]
+    mean_sim = sum(simed_sets) / len(simed_sets)
+    assert abs(mean_sim - 0.5) < 0.05
 
 
 def test_tiebreak_zero():
@@ -70,3 +88,11 @@ def test_match_one():
     simed_matches = [sim_match(0, 1) for x in range(0, 1000)]
     simed_matches = [x for x in simed_matches if x[1][-1] == (0, 2)]
     assert len(simed_matches) == 1000
+
+
+def test_theory_game_zero():
+    assert theory_game(0) == 0
+
+
+def test_theory_game_one():
+    assert theory_game(1) == 1
