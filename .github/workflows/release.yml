@@ -33,12 +33,22 @@ jobs:
         run: |
           pip install --constraint=.github/workflows/constraints.txt poetry
           poetry --version
-      # check if there is a new commit
+      # checks if there was a commit before this one
+      # HEAD^ gets 1 commit before HEAD
+      # rev-parse --verify --quiet returns git object sha
+      # whole command sets this equal to a var called sha
+      # that is used in the next step
       - name: Check if there is a parent commit
         id: check-parent-commit
         run: |
           echo "::set-output name=sha::$(git rev-parse --verify --quiet HEAD^)"
-      # if there is then grab and update
+      # if we have a valid parent commit
+      # then we must have an associated poetry version
+      # this command runs 'poetry version' and fetches the version number only
+      # i.e. instead of 'tennisim 0.1.0' it just returns '0.1.0'
+      # that's what the $2 does
+      # the action sets this version number as var 'tag'
+      # that is used in the next step
       - name: Detect and tag new version
         id: check-version
         if: steps.check-parent-commit.outputs.sha
@@ -46,15 +56,15 @@ jobs:
         with:
           version-command: |
             bash -o pipefail -c "poetry version | awk '{ print \$2 }'"
-      # use poetry to bump version
+      # if we identify the tag of the parent commit in the previous step
+      # then bump it for development version using today date
       - name: Bump version for developmental release
         if: "! steps.check-version.outputs.tag"
         run: |
           poetry version patch &&
           version=$(poetry version | awk '{ print $2 }') &&
           poetry version $version.dev.$(date +%s)
-      # build and publish package to PyPI and TesPyPI
-      # secrets stored in repo
+      # if version detected then build then publish to PyPI
       - name: Build package
         run: |
           poetry build --ansi
