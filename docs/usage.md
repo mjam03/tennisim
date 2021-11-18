@@ -1,6 +1,7 @@
 # Example
 
 Suppose we want to simulate a game of tennis. We define the probability that the server will win a given point:
+
 ```python
 from tennisim.sim import sim_game
 
@@ -12,9 +13,9 @@ This will simulate 1 game of tennis where the probability that the server will w
  - boolean result for if the server won the game
  - list of tuples for the score progression of the game
 
- We can then take this further and simulate 1,000 groups of 100 games to generate a distribution of results. This can be interesting when looking at how changes in the probability p or the length of a game impacts the servers win probability for the game.
+We can then take this further and simulate 1,000 groups of 100 games to generate a distribution of results. This can be interesting when looking at how changes in the probability p or the length of a game impacts the servers win probability for the game.
 
- ```python
+```python
 import numpy as np
 from tennisim.sim import sim_game
 
@@ -40,4 +41,4 @@ for p in probabs:
         game_lengths.append(mean_length)
     # add data to probab dict
     results[p] = (means, game_lengths)
- ```
+```
