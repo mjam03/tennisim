@@ -12,6 +12,7 @@ theme:
 
 nav:
   - tennisim: index.md
+  - Usage: usage.md
 
 plugins:
   - search
