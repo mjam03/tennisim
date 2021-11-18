@@ -47,8 +47,9 @@ jobs:
       # this command runs 'poetry version' and fetches the version number only
       # i.e. instead of 'tennisim 0.1.0' it just returns '0.1.0'
       # that's what the $2 does
-      # the action sets this version number as var 'tag'
-      # that is used in the next step
+      # once done, it checks and compares the two versions (old + new)
+      # if version has bumped then it sets the new version as 'tag'
+      # to be used in the next step
       - name: Detect and tag new version
         id: check-version
         if: steps.check-parent-commit.outputs.sha
@@ -56,25 +57,26 @@ jobs:
         with:
           version-command: |
             bash -o pipefail -c "poetry version | awk '{ print \$2 }'"
-      # if we identify the tag of the parent commit in the previous step
-      # then bump it for development version using today date
+      # if version hasn't bumped, then bump dev version as will not
+      # release to PyPI bu just TestPyPI
       - name: Bump version for developmental release
         if: "! steps.check-version.outputs.tag"
         run: |
           poetry version patch &&
           version=$(poetry version | awk '{ print $2 }') &&
           poetry version $version.dev.$(date +%s)
-      # if version detected then build then publish to PyPI
+      # build the package
       - name: Build package
         run: |
           poetry build --ansi
+      # publish to PyPI if we've bumped version
       - name: Publish package on PyPI
         if: steps.check-version.outputs.tag
         uses: pypa/gh-action-pypi-publish@v1.4.2
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
-
+      # otherwise we're just publishing to TestPyPI
       - name: Publish package on TestPyPI
         if: "! steps.check-version.outputs.tag"
         uses: pypa/gh-action-pypi-publish@v1.4.2
@@ -83,7 +85,7 @@ jobs:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
 
-      # use git token to draft release
+      # draft a new release if tag isn't blank i.e. we've bumped version
       - name: Publish the release notes
         uses: release-drafter/release-drafter@v5.15.0
         with:
@@ -108,4 +110,5 @@ jobs:
       # install libraries to make docs
       - run: pip install -r docs/requirements.txt
       # make them
+      # note this makes docs but doesn't update README.md for repo
       - run: mkdocs gh-deploy --force

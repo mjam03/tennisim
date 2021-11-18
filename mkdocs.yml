@@ -7,8 +7,8 @@ theme:
   features:
     - navigation.instant
   palette:
-    primary: deep orange
-    accent: blue
+    primary: green
+    accent: yellow
 
 nav:
   - tennisim: index.md

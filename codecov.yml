@@ -1,3 +1,9 @@
+# codecov uses a yml file
+# this isn't necessarily required as codecov uses a default yml anyway
+# see here:
+# https://docs.codecov.com/docs/codecov-yaml#do-i-need-a-codecovyml-file
+# default yml here:
+# https://docs.codecov.com/docs/codecov-yaml#default-yaml
 comment: false
 coverage:
   status:

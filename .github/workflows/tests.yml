@@ -70,6 +70,10 @@ jobs:
         run: |
           nox --force-color --python=${{ matrix.python-version }}
       # if we are running 'tests' session then upload coverage data
+      # this ensures that the coverage reports per runner are stored
+      # so that the next job (coverage) can grab them and combine them
+      # so we run coverage tests per matrix build
+      # but combine them to form one coverage report
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
         uses: "actions/upload-artifact@v2.2.4"
@@ -110,10 +114,14 @@ jobs:
         uses: actions/download-artifact@v2.0.10
         with:
           name: coverage-data
+      # specifically run the noxfile.py coverage session which combines
       - name: Combine coverage data and display human readable report
         run: |
           nox --force-color --session=coverage
       # create and upload coverage report
+      # requires logging into https://codecov.io/ with github first
+      # then report gets uploaded here and docs can pull it in
+      # as per top of docs/index.md
       - name: Create coverage report
         run: |
           nox --force-color --session=coverage -- xml
