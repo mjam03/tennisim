@@ -53,14 +53,13 @@ def sim_game(p_s: float, ppg: int = 4) -> Tuple[bool, List[Tuple[int, int]]]:
                     s += 1
                 else:
                     r += 1
-                # add score tuple to the score list
-                scores.append((s, r))
-
                 # if we're at 4 all then bring us back to 3 all
                 if (r == ppg) and (s == ppg):
                     s = ppg - 1
                     r = ppg - 1
-            # if we've excited then must be game over after deuce
+                # add score tuple to the score list
+                scores.append((s, r))
+            # if we've exited then must be game over after deuce
             if s == ppg + 1:
                 return (True, scores)
             elif r == ppg + 1:
