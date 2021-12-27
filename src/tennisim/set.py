@@ -14,6 +14,11 @@ def prob_set_outcome(
     f_a: float,
 ) -> float:
 
+    # quick check to ensure that our inputs are correct
+    # the sum of games to serve and games to return should equal
+    # our desired scoreline
+    # if g_s + g_r != sum(score):
+
     # get games you need to win and lose
     g_to_win = score[0]
     # init var to hold probab
@@ -183,7 +188,11 @@ def prob_set(p_a: float, p_b: float, g_a: int, g_b: int) -> float:
         # or we win/lose or lose/win and win the tiebreak
         p_7_5 = p_5_5 * s_a * r_a
         p_6_6 = p_5_5 * (s_a * (1 - r_a) + (1 - s_a) * r_a)
-        p_win_tb = p_6_6 * 0.5
+        # i thinbk this bit might need refined so that the tiebreak
+        # has serve dependency i.e. we work out who should serve first
+        # in the tiebreak and then calculate the probability of winning
+        # based on that
+        p_win_tb = p_6_6 * prob_tb
         prob += p_7_5 + p_win_tb
 
     return prob

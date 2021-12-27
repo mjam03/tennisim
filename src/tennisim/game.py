@@ -114,15 +114,12 @@ def prob_game(p: float, x: int, y: int) -> float:
         p_win_deuce = prob_win_deuce(p)
         # multiply and add on
         prob += p_deuce * p_win_deuce
-    # else if just at deuce then add on prob winning it
-    elif x == 3 and y == 3:
-        prob += prob_win_deuce(p)
     # else if in deuce but x at 'advantage'
     elif x == 4 and y == 3:
         # then just need to win one more point to win
         prob += p
     # else if in deuce but y at 'advantage'
-    elif y == 4 and x == 3:
+    elif x == 3 and y == 4:
         # then need to win next point and then deuce
         prob += p * prob_win_deuce(p)
     return prob
