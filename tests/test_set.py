@@ -11,7 +11,7 @@ class TestProbSetOutcome:
         """Tests to ensure if guaranteed to win all games then do"""
         g_to_win = [x * 2 for x in range(1, 10)]
         s_ps = [
-            prob_set_outcome((x, 0), x / 2, x / 2, 1, 1, 1) for x in g_to_win
+            prob_set_outcome((x, 0), x // 2, x // 2, 1, 1, 1) for x in g_to_win
         ]
         assert min(s_ps) == 1.0
 
@@ -19,7 +19,7 @@ class TestProbSetOutcome:
         """Tests to ensure if guaranteed to lose all games then do"""
         g_to_win = [x * 2 for x in range(1, 10)]
         s_ps = [
-            prob_set_outcome((x, 0), x / 2, x / 2, 0, 0, 0) for x in g_to_win
+            prob_set_outcome((x, 0), x // 2, x // 2, 0, 0, 0) for x in g_to_win
         ]
         assert max(s_ps) == 0.0
 
