@@ -14,6 +14,24 @@ def prob_set_outcome(
     f_a: float,
 ) -> float:
 
+    """For a given score outcome in games, returns the probability of that
+    scoreline occurring given:
+     - how many games the current server will serve and return
+     - the prob of them winning service and return games
+
+    Args:
+        score (tuple): games server and returner needs to win for scoreline
+        g_s (int): games current server will serve (ex final game)
+        g_r (int): games current returner will serve (ex final game)
+        s_a (float): prob server wins their service game
+        r_a (float): prob server wins a return game
+        f_a (float): prob server wins final game (already determined if serve
+        or return)
+
+    Returns:
+        float: Probability of set scoreline occuring
+    """
+
     # quick check to ensure that our inputs are correct
     # the sum of games to serve and games to return should equal
     # our desired scoreline
@@ -57,6 +75,20 @@ def prob_set_outcome(
 
 
 def prob_set(p_a: float, p_b: float, g_a: int, g_b: int) -> float:
+
+    """Given probabilities for server and returner to win points on their
+    respective serves, and the games already won by each, returns the prob
+    that the current server will win the set
+
+    Args:
+        p_a (float): prob current server wins any point on their serve
+        p_b (float): prob current returner wins any point on their serve
+        g_a (int): games already won by current server
+        g_b (int): games already won by current returner
+
+    Returns:
+        float: Probability that current server will win the set
+    """
 
     # solve corners first
     if g_a == 7:

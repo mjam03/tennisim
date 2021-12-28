@@ -104,7 +104,7 @@ def compute_tb_outcomes(
 def create_tb_outcomes(p_a: float, p_b: float, pt_a: int, pt_b: int) -> dict:
     """Given a first to 7 tiebreak, return tiebreak outcomes based on current
     scoreline. This is a helper function required to compute the probability
-    of a given scoreline based on the current score
+    of a given scoreline based on the current score.
 
     Args:
         p_a (float): probability current server wins point on serve
@@ -113,7 +113,7 @@ def create_tb_outcomes(p_a: float, p_b: float, pt_a: int, pt_b: int) -> dict:
         pt_b (int): points current returner has already won
 
     Returns:
-        dict: {final_set_score: data_required_to_compute_prob}
+        dict: {final_tb_score: data_required_to_compute_prob}
     """
 
     # e.g. if current is 3-2 this will create [7-2, 7-3, 7-4, 7-5]
@@ -134,7 +134,13 @@ def prob_tb_outcome(
     p_a: float,
     p_b: float,
 ) -> float:
-    """[summary]
+    """For a given tiebreak score in points, ns, and the respective:
+     - point count that current server will serve and return
+     - prob of winning point on service for each player
+     - prob that current server will win final point
+    returns the probability of that outcome happening by taking into account
+    all the possible paths that make that possible.
+
 
     Args:
         ns (Tuple[int, int]): needed scoreline e.g. (4,0) means current server
@@ -146,7 +152,7 @@ def prob_tb_outcome(
         p_b (float): probability current returner wins point on serve
 
     Returns:
-        float: probability that set ends with given needed scoreline
+        float: probability that tiebreak ends with given scoreline, ns
     """
 
     prob = 0.00

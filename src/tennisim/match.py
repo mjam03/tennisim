@@ -9,6 +9,21 @@ from tennisim.utils import comb
 def prob_match_outcome(
     p_set: float, st_a: int, st_b: int, sets: int = 3
 ) -> Tuple[float, dict]:
+    """Computes probability of player 'a' winning the match given an initial
+    scoreline of (sta_, st_b) and returns a tuple of this prob along with the
+    individual scorelines that make this up e.g. if (0,0) and 0.5 would be:
+    {0.5, {(2,0): 0.5, (2,1): 0.25})
+
+    Args:
+        p_set (float): probability that 'a' wins a given set
+        st_a (int): sets already won by 'a'
+        st_b (int): sets already won by 'b'
+        sets (int, optional): how many sets match is 'best of'. Defaults to 3.
+
+    Returns:
+        Tuple[float, dict]: prob that 'a' wins match and dict of:
+        {score_line: probab}
+    """
 
     # solve corners first - you win by winning best of sets
     win_m = sets // 2 + 1
@@ -47,6 +62,23 @@ def prob_match(
     pt_b: int = 0,
     sets: int = 3,
 ) -> float:
+    """Given a state of a tennis match in sets, games and points; returns the
+    probability that the player will win the match.
+
+    Args:
+        p_a (float): prob that player 'a' wins a point on their serve
+        p_b (float): prob that player 'b' wins a point on their serve
+        st_a (int, optional): sets already won by 'a'. Defaults to 0.
+        st_b (int, optional): sets already won by 'b'. Defaults to 0.
+        g_a (int, optional): games in curr set won by 'a'. Defaults to 0.
+        g_b (int, optional): games in curr set won by 'b'. Defaults to 0.
+        pt_a (int, optional): points in curr game won by 'a'. Defaults to 0.
+        pt_b (int, optional): points in curr game won by 'b'. Defaults to 0.
+        sets (int, optional): how many sets match si 'best of'. Defaults to 3.
+
+    Returns:
+        float: probability that player 'a' wins the match
+    """
 
     # check corners first
     win_m = sets // 2 + 1

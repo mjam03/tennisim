@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tennisim"
-version = "0.1.1"
+version = "0.1.2"
 description = "Simple pure python functions for simulating tennis matches"
 authors = ["Mark Jamison <markjamison03@gmail.com>"]
 license = "MIT"
